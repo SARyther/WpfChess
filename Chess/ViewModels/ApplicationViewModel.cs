@@ -228,20 +228,9 @@ namespace Chess.ViewModels
 
         public void PlayChess960Action(object sender)
         {
-            int[] p1Pieces = new int[8] { 1, 2, 3, 4, 5, 3, 2, 1 }.RandomizePositions();
-            int[] p2Pieces = new int[8] { 1, 2, 3, 4, 5, 3, 2, 1 }.RandomizePositions();
-
             try
             {
-                string[] content = File.ReadAllLines(Path.Combine(DirectoryInfos.TxtFolder, "Start_Black.txt"));
-                content[3] = p1Pieces.ToTxtLine();
-                content[10] = p2Pieces.ToTxtLine();
-
-                string outputPath = Path.GetTempFileName();
-                File.WriteAllLines(outputPath, content);
-
-                Board board960 = Serializer.ImportFromTxt(outputPath);
-                Chess.Reset(board960);
+                Chess.Reset(Board.Get960Board());
                 PlayerModel1.Reset();
                 PlayerModel2.Reset();
                 SetTurnedPlayer();

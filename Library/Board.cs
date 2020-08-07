@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 
 namespace Library
@@ -19,6 +20,21 @@ namespace Library
             MakeBoard();
 
             PossibleMoves = new List<Move>();
+        }
+
+        public static Board Get960Board()
+        {
+            int[] p1Pieces = new int[8] { 1, 2, 3, 4, 5, 3, 2, 1 }.RandomizePositions();
+            int[] p2Pieces = new int[8] { 1, 2, 3, 4, 5, 3, 2, 1 }.RandomizePositions();
+
+            string[] content = File.ReadAllLines(DirectoryInfos.GetPath("Start_Black.txt"));
+            content[3] = p1Pieces.ToTxtLine();
+            content[10] = p2Pieces.ToTxtLine();
+
+            string outputPath = Path.GetTempFileName();
+            File.WriteAllLines(outputPath, content);
+
+            return Serializer.ImportFromTxt(outputPath);
         }
 
         private void MakeBoard()

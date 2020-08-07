@@ -32,6 +32,14 @@ namespace LibraryTest
         public void MakeBoardTest()
         {
             Board board = new Board();
+            Assert.IsNotNull(board);
+        }
+
+        [Test]
+        public void Make960BoardTest()
+        {
+            Board board = Board.Get960Board();
+            Assert.IsNotNull(board);
         }
     }
 }
