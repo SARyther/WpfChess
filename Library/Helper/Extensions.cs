@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 
 namespace Library
 {
@@ -35,6 +36,37 @@ namespace Library
                 return observableCollection;
             }
             return null;
+        }
+
+        public static int[] RandomizePositions(this int[] collection)
+        {
+            Random rand = new Random();
+            for(int i = 0; i < collection.Length; i++)
+            {
+                int randomIndex = rand.Next(0, collection.Length);
+                int temp = collection[i];
+                collection[i] = collection[randomIndex];
+                collection[randomIndex] = temp;
+            }
+
+            return collection;
+        }
+
+        public static string ToTxtLine(this int[] collection)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            for (int i = 0; i < collection.Length; i++)
+            {
+                builder.Append(collection[i]);
+
+                if (i != collection.Length - 1)
+                {
+                    builder.Append(" ");
+                }
+            }
+
+            return builder.ToString();
         }
     }
 }
