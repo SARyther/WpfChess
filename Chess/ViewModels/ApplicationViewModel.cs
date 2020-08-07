@@ -2,7 +2,10 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Chess.ViewModels
@@ -42,6 +45,7 @@ namespace Chess.ViewModels
             ImportTxtCommand = new ActionCommand(ImportTxtAction);
             ImportXmlCommand = new ActionCommand(ImportXmlAction);
             ExportXmlCommand = new ActionCommand(ExportXmlAction);
+            PlayChess960Command = new ActionCommand(PlayChess960Action);
 
             SquareCommand = new ActionCommand(SquareAction);
 
@@ -71,6 +75,8 @@ namespace Chess.ViewModels
         public ICommand ImportXmlCommand { get; }
 
         public ICommand ExportXmlCommand { get; }
+
+        public ICommand PlayChess960Command { get; }
 
         public ICommand SquareCommand { get; }
         #endregion
@@ -188,7 +194,7 @@ namespace Chess.ViewModels
                     PlayerModel1.Reset();
                     PlayerModel2.Reset();
                     SetTurnedPlayer();
-                    Message.StartBox(Level.Info, "Your board has successfully been imported and is ready to use", "Export Successful");
+                    Message.StartBox(Level.Info, "Your board has successfully been imported and is ready to use", "Import Successful");
                 }
                 catch (Exception e)
                 {
@@ -218,6 +224,36 @@ namespace Chess.ViewModels
                     return;
                 }
             }
+        }
+
+        public void PlayChess960Action(object sender)
+        {
+            int[] p1Pieces = new int[8] { 1, 2, 3, 4, 5, 3, 2, 1 }.RandomizePositions();
+            int[] p2Pieces = new int[8] { 1, 2, 3, 4, 5, 3, 2, 1 }.RandomizePositions();
+
+            try
+            {
+                string[] content = File.ReadAllLines(Path.Combine(DirectoryInfos.TxtFolder, "Start_Black.txt"));
+                content[3] = p1Pieces.ToTxtLine();
+                content[10] = p2Pieces.ToTxtLine();
+
+                string outputPath = Path.GetTempFileName();
+                File.WriteAllLines(outputPath, content);
+
+                Board board960 = Serializer.ImportFromTxt(outputPath);
+                Chess.Reset(board960);
+                PlayerModel1.Reset();
+                PlayerModel2.Reset();
+                SetTurnedPlayer();
+
+                Message.StartBox(Level.Info, "Your board has successfully been created!", "960 Setup Successful");
+            }
+            catch (Exception e)
+            {
+                Message.StartBox(Level.Error, e.Message, "Creation Error");
+                return;
+            }
+
         }
         #endregion
 

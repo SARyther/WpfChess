@@ -1,5 +1,7 @@
 # WPF Chess
 
+THIS FORK IS FOR A CLASS ASSIGNMENT TO MODIFY AN EXISTING CHESS PROJECT
+
 This is a chess game based on .NET Core 3 and the WPF framework.<br/>
 You can generate custom piece formations and can change all important settings (e.g. maximum time for the players) outside of the application code (XML file). 
 
@@ -167,3 +169,4 @@ When you've saved the current board state into the XML file, you can can continu
 ## Authors
 
 * **Dominik Weder** - *Main* - [Sh4rpL1nQ](https://github.com/Sh4rpL1nQ)
+* **Sebastian Ryther** - *Chess960* - [SARyther](https://github.com/SARyther)

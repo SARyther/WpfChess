@@ -58,6 +58,7 @@
                 <MenuItem Header="Import TXT" Command="{Binding ImportTxtCommand}"></MenuItem>
                 <MenuItem Header="Import XML" Command="{Binding ImportXmlCommand}"></MenuItem>
                 <MenuItem Header="Export Board (XML)" Command="{Binding ExportXmlCommand}"></MenuItem>
+                <MenuItem Header="Play Chess 960" Command="{Binding PlayChess960Command}"></MenuItem>
             </Menu>
             <Grid>
                 <Grid.ColumnDefinitions>
