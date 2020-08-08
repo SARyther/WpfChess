@@ -24,17 +24,61 @@ namespace Library
 
         public static Board Get960Board()
         {
-            int[] p1Pieces = new int[8] { 1, 2, 3, 4, 5, 3, 2, 1 }.RandomizePositions();
-            int[] p2Pieces = new int[8] { 1, 2, 3, 4, 5, 3, 2, 1 }.RandomizePositions();
-
+            string textLine = Get960Order().ToTxtLine();
             string[] content = File.ReadAllLines(DirectoryInfos.GetPath("Start_Black.txt"));
-            content[3] = p1Pieces.ToTxtLine();
-            content[10] = p2Pieces.ToTxtLine();
+            content[3] = textLine;
+            content[10] = textLine;
 
             string outputPath = Path.GetTempFileName();
             File.WriteAllLines(outputPath, content);
 
             return Serializer.ImportFromTxt(outputPath);
+        }
+
+        private static int[] Get960Order()
+        {
+            Random rand = new Random();
+            int[] order = new int[8];
+            List<int> openIndexes = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7 };
+
+            //Get index for king NOT at an edge
+            int kingPosition = rand.Next(1, 7);
+            openIndexes.Remove(kingPosition);
+
+            //Get indexes for rooks that surround king
+            int rookPosition1 = rand.Next(0, kingPosition);
+            openIndexes.Remove(rookPosition1);
+            int rookPosition2 = rand.Next(kingPosition + 1, 8);
+            openIndexes.Remove(rookPosition2);
+
+            //Get indexes for bishops on alternate colored squares
+            List<int> openEven = openIndexes.Where(x => (x + 1) % 2 == 0).ToList();
+            List<int> openOdd = openIndexes.Where(x => (x + 1) % 2 == 1).ToList();
+            int bishopPosition1 = openEven[rand.Next(0, openEven.Count())];
+            openIndexes.Remove(bishopPosition1);
+            int bishopPosition2 = openOdd[rand.Next(0, openOdd.Count())];
+            openIndexes.Remove(bishopPosition2);
+
+            //Get random position from remaining indexes for both knights and the queen
+            int knightPosition1 = openIndexes[rand.Next(0, openIndexes.Count)];
+            openIndexes.Remove(knightPosition1);
+            int knightPosition2 = openIndexes[rand.Next(0, openIndexes.Count)];
+            openIndexes.Remove(knightPosition2);
+            int queenPosition = openIndexes[0];
+            openIndexes.Remove(queenPosition);
+
+            if (openIndexes.Count > 0) throw new InvalidOperationException("Error getting valid 960 order.");
+
+            order[kingPosition] = 5;
+            order[queenPosition] = 4;
+            order[rookPosition1] = 1;
+            order[rookPosition2] = 1;
+            order[knightPosition1] = 2;
+            order[knightPosition2] = 2;
+            order[bishopPosition1] = 3;
+            order[bishopPosition2] = 3;
+
+            return order;
         }
 
         private void MakeBoard()

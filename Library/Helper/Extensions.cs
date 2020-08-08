@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Library.Pieces;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -36,20 +37,6 @@ namespace Library
                 return observableCollection;
             }
             return null;
-        }
-
-        public static int[] RandomizePositions(this int[] collection)
-        {
-            Random rand = new Random();
-            for(int i = 0; i < collection.Length; i++)
-            {
-                int randomIndex = rand.Next(0, collection.Length);
-                int temp = collection[i];
-                collection[i] = collection[randomIndex];
-                collection[randomIndex] = temp;
-            }
-
-            return collection;
         }
 
         public static string ToTxtLine(this int[] collection)
